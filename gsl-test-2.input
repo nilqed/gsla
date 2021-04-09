@@ -1,0 +1,18 @@
+)co gsl
+
+--)lisp (gsl::gsl-lookup "gsl_sf_elljac_e")
+--)lisp (gsl::documentation #'gsl::jacobian-elliptic-functions 'function)
+
+lookup "gsl_sf_elljac_e" 
+
+lookup "gsl_log1p"
+)lisp (gsl::log+1 5.6)
+
+MSC ==> MoreSystemCommands
+  
+syscmd(s) ==> systemCommand(s)$MSC
+lisp1(s)  ==> syscmd(string(FORMAT('NIL,"lisp ~A",s)$Lisp)) 
+
+--lisp1 "(defun LOG+1 (x) (gsl::LOG+1 x))"
+
+gsl_log1p 3.4

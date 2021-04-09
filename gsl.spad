@@ -1,6 +1,3 @@
-)lisp (load "~/quicklisp/setup")
-)lisp (ql:quickload "gsll")
-)lisp (load "gsl.lisp")
 )abbrev package GSL Gsl
 ++ GNU Scientific Library for Axiom (and FriCAS and OpenAxiom)
 ++ Date Created: October 25, 2015
@@ -16,6 +13,11 @@
 ++   https://common-lisp.net/project/gsll/
 ++   http://www.gnu.org/software/gsl/
 ++   http://www.gnu.org/software/gsl/manual/gsl-ref.html
+++   sudo apt install libgsl-dev
+++   gsl-config --prefix => /usr
+++   sudo apt remove  cl-cffi
+++     sudo apt remove  cl-cffi
+++   
 ++ Description:
 ++   Provides an interface to the routines of the GNU Scientific Library.
 ++   http://www.gnu.org/software/gsl/manual/
@@ -24,6 +26,12 @@
 Gsl() : Exports == Implementation where
 
   DF ==> DoubleFloat
+
+  MSC ==> MoreSystemCommands
+  SEX ==> SExpression
+  
+  syscmd(s) ==> systemCommand(s)$MSC
+  lisp1(s)  ==> syscmd(string(FORMAT('NIL,"lisp ~A",s)$Lisp)) 
 
   Exports ==  with
 
@@ -92,8 +100,18 @@ Gsl() : Exports == Implementation where
       ++ The sign of the permutation is returned as the third value;
       ++ it is the value (-1)^n, where n is the number of interchanges in
       ++ thepermutation.
+    gsl_log1p : DF -> DF
+      ++
+    gsl_expm1 : DF -> DF
+      ++
+    gsl_hypot : (DF,DF) -> DF
 
   Implementation ==  add
+
+    -- Load Lisp files
+    lisp1 "(load _"~/quicklisp/setup_")"
+    lisp1 "(ql:quickload :gsll)"
+    lisp1 "(load _"gsl.lisp_")"
 
     lookup(s) ==
       j:SExpression := GSL_-LOOKUP(s)$Lisp
@@ -113,7 +131,7 @@ Gsl() : Exports == Implementation where
     --
     integrationQng(f,a,b) == GSLINTEGRATIONQNG(
       (v1:DF,v2:DF,v3:Integer):Record(result:DF, abserr:DF, neval:Integer)+->[v1,v2,v3],
-      f,a,b,nil()$List(DF))$Lisp
+      f,a,b,[]$List(DF))$Lisp
     integrationQng(f,a,b,epsabs) == GSLINTEGRATIONQNG(
       (v1:DF,v2:DF,v3:Integer):Record(result:DF, abserr:DF, neval:Integer)+->[v1,v2,v3],
       f,a,b,[epsabs]$List(DF))$Lisp
@@ -132,4 +150,22 @@ Gsl() : Exports == Implementation where
       (v1:List List DF, v2: List Integer,v3:Integer):Record(LU:Matrix DF,Perm:Vector Integer,Sign:Integer) +->
         [matrix v1,vector v2,v3],
       listOfLists A,nrows A,ncols A)$Lisp
+
+    --
+    lisp1 "(defun |gsl_log1p| (x) (gsl::LOG+1 x))"
+    gsl_log1p(x:DF):DF == float(gsl_log1p(x)$Lisp)$SEX
+
+    lisp1 "(defun |gsl_expm1| (x) (gsl::EXP-1 x))"
+    gsl_expm1(x:DF):DF == float(gsl_expm1(x)$Lisp)$SEX
+
+    lisp1 "(defun |gsl_hypot| (x y) (gsl::HYPOTENUSE* x y))"
+    gsl_hypot(x:DF,y:DF):DF == float(gsl_hypot(x,y)$Lisp)$SEX
+
+    --gsl-asinh
+    --gsl-atanh
+
+    --gsl_hypot3
+    --lookup "gsl_poly_eval"
+
+
 

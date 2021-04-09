@@ -1,9 +1,19 @@
 (in-package :boot)
-(import 'gsll:gsl-lookup)
-(import (list 'gsll:nanp 'gsll:finitep 'gsl:double-float-unequal))
+;(import 'gsll:gsl-lookup)
+;(import (list 'gsll:nanp 'gsll:finitep 'gsl:double-float-unequal))
 ;(import 'gsll:integration-qng)
 ;(import 'gsl:lu-decomposition)
 ; more ...
+
+
+(defun gsl-lookup (x) (gsll::gsl-lookup x))
+(defun nanp (a) (gsll::nanp a))
+(defun finitep (a) (gsll::finitep a))
+(defun double-float-unequal (a b c) (gsll::double-float-unequal a b c))
+
+
+
+
 
 (defun |lambdaFuncallSpad| (f)
  (lambda (x) (funcall f x nil)))
